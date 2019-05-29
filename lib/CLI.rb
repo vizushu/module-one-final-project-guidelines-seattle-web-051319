@@ -34,32 +34,9 @@ class CLI
         puts "3. Exit"
           choice = STDIN.gets.chomp.to_i
           if choice == 1
-            @random_song = Song.all.sample
-            puts
-            puts "#{@random_song.name} by: #{@random_song.artist}"
-            puts
-            puts "1. Save this song to my likes"
-            puts "2. Go back"
-            puts
-            
-          saved_song
-
+              random_song
           elsif choice == 2
-            puts
-            @user_1 = User.find(@user_1.id)
-            @user_1.likes.each do |like|
-              puts "#{like.song.name} by: #{like.song.artist}"
-              end
-            @menu = 2
-            puts
-            puts "1. Go back"
-            puts "2. Exit"
-            choice_3 = STDIN.gets.chomp.to_i
-            if choice_3 == 1
-              @menu = 1
-            elsif choice_3 == 2
-              is_running = false
-            end
+              view_likes
           elsif choice == 3
             is_running = false
           end
@@ -80,4 +57,33 @@ class CLI
             end
       end
           
+      def random_song
+        @random_song = Song.all.sample
+            puts
+            puts "#{@random_song.name} by: #{@random_song.artist}"
+            puts
+            puts "1. Save this song to my likes"
+            puts "2. Go back"
+            puts
+            saved_song
+      end
+
+      def view_likes
+        puts
+            @user_1.reload # = User.find(@user_1.id)
+            @user_1.likes.each do |like|
+              puts "#{like.song.name} by: #{like.song.artist}"
+              end
+            @menu = 2
+            puts
+            puts "1. Go back"
+            puts "2. Exit"
+            choice_3 = STDIN.gets.chomp.to_i
+            if choice_3 == 1
+              @menu = 1
+            elsif choice_3 == 2
+              is_running = false
+            end
+          end
+
 end
