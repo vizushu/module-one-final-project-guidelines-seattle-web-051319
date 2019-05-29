@@ -31,13 +31,16 @@ class CLI
         puts
         puts "1. Give me a random song"
         puts "2. Let me see my liked songs"
-        puts "3. Exit"
+        puts "3. Let me see my disliked songs"
+        puts "4. Exit"
           choice = STDIN.gets.chomp.to_i
           if choice == 1
-              random_song
+            random_song
           elsif choice == 2
-              view_likes
+            view_likes
           elsif choice == 3
+            view_dislikes
+          elsif choice == 4
             @is_running = false
           end
         end
@@ -71,8 +74,12 @@ class CLI
       def view_likes
         puts
         @user_1.reload
-        @user_1.likes.each do |like|
-          puts "#{like.song.name} by: #{like.song.artist}"
+        if @user_1.likes.count > 0
+          @user_1.likes.each do |like|
+            puts "#{like.song.name} by: #{like.song.artist}"
+          end
+        else
+          puts "You don't have any likes!"
         end
         @menu = 2
         puts
@@ -93,4 +100,32 @@ class CLI
         @user_1.likes.destroy_all
       end
 
+      def view_dislikes
+        puts
+        @user_1.reload
+        if @user_1.dislikes.count > 0
+          @user_1.dislikes.each do |dislike|
+            puts "#{dislike.song.name} by: #{dislike.song.artist}"
+          end
+        else
+          puts "You don't have any dislikes!"
+        end
+        @menu = 2
+        puts
+        puts "1. Clear all dislikes"
+        puts "2. Go back"
+        puts "3. Exit"
+        choice_3 = STDIN.gets.chomp.to_i
+        if choice_3 == 1
+          clear_dislikes
+        elsif choice_3 == 2
+          @menu = 1
+        elsif choice_3 == 3
+          @is_running = false
+        end
+      end
+
+      def clear_dislikes
+        @user_1.dislikes.destroy_all
+      end
 end
