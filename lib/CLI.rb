@@ -25,12 +25,16 @@ class CLI
 
   def main_menu
     @is_running = true
+    @count = 1
     while @is_running
-      @count = 1
       @menu = 1
       if @menu == 1
         puts
-        puts "1. Give me a random song"
+        if @count == 1
+          puts "1. Let me see a random song"
+        else
+          puts "1. Let me see #{@count} random songs"
+        end
         puts "2. Let me see my liked songs"
         puts "3. Let me see my disliked songs"
         puts "4. Settings"
@@ -64,16 +68,21 @@ class CLI
     end
 
       def random_song(number_of_songs)
-        binding.pry
         @random_song = filter_songs.sample(number_of_songs)
             puts
-            @random_song.each do |song| 
+            @random_song.each do |song|
             puts "#{song.name} by: #{song.artist}"
             end
             puts
-            puts "1. Save this song to my likes"
-            puts "2. Save this song to my dislikes"
-            puts "3. Go back"
+            if @count == 1
+              puts "1. Save this song to my likes"
+              puts "2. Save this song to my dislikes"
+              puts "3. Go back"
+            else
+              puts "1. Save these songs to my likes"
+              puts "2. Save these songs to my dislikes"
+              puts "3. Go back"
+            end
             puts
             saved_song
       end
@@ -82,14 +91,18 @@ class CLI
         @menu = 2
           choice_2 = STDIN.gets.chomp.to_i
           if choice_2 == 1
-            Like.create(user_id: @user_1.id, song_id: @random_song.id)
             puts
-            puts "#{@random_song.name} by: #{@random_song.artist} saved to likes!"
+            @random_song.each do |song|
+              Like.create(user_id: @user_1.id, song_id: song.id)
+              puts "#{song.name} by: #{song.artist} saved to likes!"
+            end
             @menu = 1
           elsif choice_2 == 2
-            Dislike.create(user_id: @user_1.id, song_id: @random_song.id)
             puts
-            puts "#{@random_song.name} by: #{@random_song.artist} saved to dislikes!"
+            @random_song.each do |song|
+              Dislike.create(user_id: @user_1.id, song_id: song.id)
+              puts "#{song.name} by: #{song.artist} saved to dislikes!"
+            end
             @menu = 1
           elsif choice_2 == 3
             @menu = 1
