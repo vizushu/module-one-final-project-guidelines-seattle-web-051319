@@ -53,9 +53,14 @@ class CLI
             if choice_2 == 1
               Like.create(user_id: @user_1.id, song_id: @random_song.id)
               puts
-              puts "#{@random_song.name} by: #{@random_song.artist} saved!"
+              puts "#{@random_song.name} by: #{@random_song.artist} saved to likes!"
               @menu = 1
             elsif choice_2 == 2
+              Dislike.create(user_id: @user_1.id, song_id: @random_song.id)
+              puts
+              puts "#{@random_song.name} by: #{@random_song.artist} saved to dislikes!"
+              @menu = 1
+            elsif choice_2 == 3
               @menu = 1
             end
       end
@@ -66,7 +71,8 @@ class CLI
             puts "#{@random_song.name} by: #{@random_song.artist}"
             puts
             puts "1. Save this song to my likes"
-            puts "2. Go back"
+            puts "2. Save this song to my dislikes"
+            puts "3. Go back"
             puts
             saved_song
       end
@@ -82,18 +88,26 @@ class CLI
           puts "You don't have any likes!"
         end
         @menu = 2
-        puts
-        puts "1. Clear all likes"
-        puts "2. Go back"
-        puts "3. Exit"
+        puts 
+        puts "1. Remove most recent like"
+        puts "2. Clear all likes"
+        puts "3. Go back"
+        puts "4. Exit"
         choice_3 = STDIN.gets.chomp.to_i
         if choice_3 == 1
-          clear_likes
+          remove_recent_like
         elsif choice_3 == 2
-          @menu = 1
+          clear_likes
         elsif choice_3 == 3
+          @menu = 1
+        elsif choice_3 == 4
           @is_running = false
         end
+      end
+
+      def remove_recent_like
+        @user_1.reload
+        @user_1.likes.last.destroy
       end
 
       def clear_likes
@@ -112,17 +126,25 @@ class CLI
         end
         @menu = 2
         puts
-        puts "1. Clear all dislikes"
-        puts "2. Go back"
-        puts "3. Exit"
+        puts "1. Remove most recent dislike"
+        puts "2. Clear all dislikes"
+        puts "3. Go back"
+        puts "4. Exit"
         choice_3 = STDIN.gets.chomp.to_i
         if choice_3 == 1
-          clear_dislikes
+          remove_recent_dislike
         elsif choice_3 == 2
-          @menu = 1
+          clear_dislikes
         elsif choice_3 == 3
+          @menu = 1
+        elsif choice_3 == 4
           @is_running = false
         end
+      end
+
+      def remove_recent_dislike
+        @user_1.reload
+        @user_1.dislikes.last.destroy
       end
 
       def clear_dislikes
