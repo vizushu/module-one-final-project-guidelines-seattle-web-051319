@@ -4,10 +4,15 @@ class CLI
 
   def run
     puts "Welcome to the Random Song Suggestion CLI"
-    main_menu
-  end
+    puts "Please enter your username"
+    
+    name = STDIN.gets.chomp
+      if User.find_by_name(name) == nil
+        user_1 = User.create(name: name)
+      else
+        user_1 = User.find_by_name(name)
+      end
 
-  def main_menu
     is_running = true
     puts "1. Give me a random song"
     puts "2. Let me see my liked songs"
@@ -17,11 +22,12 @@ class CLI
       if choice == 1
         puts Song.all.sample.name
       elsif choice == 2
-        User.likes
+        user_1.likes.each do |like|
+          puts like.song.name
+        end
       elsif choice == 3
         is_running = false
       end
     end
   end
-
 end
