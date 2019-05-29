@@ -1,7 +1,7 @@
 require_relative '../config/environment'
 
 def get_songs
-  songs = RestClient.get("http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=177f68a78b2b15f27238746a0ae1eea3&format=json")
+  songs = RestClient.get("http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=#{API_KEY}&format=json")
   parsed_songs = JSON.parse(songs)
 end
 
