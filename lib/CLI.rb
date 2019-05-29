@@ -26,7 +26,7 @@ class CLI
           if choice == 1
             random_song = Song.all.sample
             puts
-            puts random_song.name
+            puts "#{random_song.name} by: #{random_song.artist}"
             puts
             puts "1. Save this song to my likes"
             puts "2. Go back"
@@ -36,7 +36,7 @@ class CLI
             if choice_2 == 1
               Like.create(user_id: user_1.id, song_id: random_song.id)
               puts
-              puts "#{random_song.name} saved"
+              puts "#{random_song.name} by: #{random_song.artist} saved!"
               menu = 1
             elsif choice_2 == 2
               menu = 1
@@ -45,7 +45,7 @@ class CLI
             puts
             user_1 = User.find(user_1.id)
             user_1.likes.each do |like|
-              puts like.song.name
+              puts "#{like.song.name} by: #{like.song.artist}"
               end
             menu = 2
             puts
