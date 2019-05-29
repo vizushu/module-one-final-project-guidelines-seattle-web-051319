@@ -1,5 +1,5 @@
 class CLI
-  attr_accessor :user_1, :menu, :random_song
+  attr_accessor :user_1, :menu, :random_song, :is_running
 
   def initialize
   end
@@ -7,14 +7,14 @@ class CLI
   def run
     puts "Welcome to the Random Song Suggestion CLI"
     puts "Please enter your username"
-    puts 
+    puts
 
     get_username
     main_menu
 
   end
 
-  def get_username 
+  def get_username
     name = STDIN.gets.chomp
       if User.find_by_name(name) == nil
         @user_1 = User.create(name: name)
@@ -24,8 +24,8 @@ class CLI
   end
 
   def main_menu
-    is_running = true
-    while is_running
+    @is_running = true
+    while @is_running
       @menu = 1
       if @menu == 1
         puts
@@ -38,7 +38,7 @@ class CLI
           elsif choice == 2
               view_likes
           elsif choice == 3
-            is_running = false
+            @is_running = false
           end
         end
       end
@@ -56,7 +56,7 @@ class CLI
               @menu = 1
             end
       end
-          
+
       def random_song
         @random_song = Song.all.sample
             puts
@@ -70,20 +70,27 @@ class CLI
 
       def view_likes
         puts
-            @user_1.reload # = User.find(@user_1.id)
-            @user_1.likes.each do |like|
-              puts "#{like.song.name} by: #{like.song.artist}"
-              end
-            @menu = 2
-            puts
-            puts "1. Go back"
-            puts "2. Exit"
-            choice_3 = STDIN.gets.chomp.to_i
-            if choice_3 == 1
-              @menu = 1
-            elsif choice_3 == 2
-              is_running = false
-            end
-          end
+        @user_1.reload
+        @user_1.likes.each do |like|
+          puts "#{like.song.name} by: #{like.song.artist}"
+        end
+        @menu = 2
+        puts
+        puts "1. Clear all likes"
+        puts "2. Go back"
+        puts "3. Exit"
+        choice_3 = STDIN.gets.chomp.to_i
+        if choice_3 == 1
+          clear_likes
+        elsif choice_3 == 2
+          @menu = 1
+        elsif choice_3 == 3
+          @is_running = false
+        end
+      end
+
+      def clear_likes
+        @user_1.likes.destroy_all
+      end
 
 end
