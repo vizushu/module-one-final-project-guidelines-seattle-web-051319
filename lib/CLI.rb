@@ -47,26 +47,20 @@ class CLI
       end
     end
 
-    def saved_song
-      @menu = 2
-            choice_2 = STDIN.gets.chomp.to_i
-            if choice_2 == 1
-              Like.create(user_id: @user_1.id, song_id: @random_song.id)
-              puts
-              puts "#{@random_song.name} by: #{@random_song.artist} saved to likes!"
-              @menu = 1
-            elsif choice_2 == 2
-              Dislike.create(user_id: @user_1.id, song_id: @random_song.id)
-              puts
-              puts "#{@random_song.name} by: #{@random_song.artist} saved to dislikes!"
-              @menu = 1
-            elsif choice_2 == 3
-              @menu = 1
-            end
+    def filter_songs
+      disliked_songs = @user_1.dislikes.map {|dislike| dislike.song}
+      liked_songs = @user_1.likes.map {|like| like.song}
+      removed_dislikes = Song.all.select do |song|
+        disliked_songs.include?(song) == false
       end
+      updated_songs = removed_dislikes.select do |song|
+        liked_songs.include?(song) == false
+      end
+      updated_songs
+    end
 
       def random_song
-        @random_song = Song.all.sample
+        @random_song = filter_songs.sample
             puts
             puts "#{@random_song.name} by: #{@random_song.artist}"
             puts
@@ -76,6 +70,24 @@ class CLI
             puts
             saved_song
       end
+
+      def saved_song
+        @menu = 2
+          choice_2 = STDIN.gets.chomp.to_i
+          if choice_2 == 1
+            Like.create(user_id: @user_1.id, song_id: @random_song.id)
+            puts
+            puts "#{@random_song.name} by: #{@random_song.artist} saved to likes!"
+            @menu = 1
+          elsif choice_2 == 2
+            Dislike.create(user_id: @user_1.id, song_id: @random_song.id)
+            puts
+            puts "#{@random_song.name} by: #{@random_song.artist} saved to dislikes!"
+            @menu = 1
+          elsif choice_2 == 3
+            @menu = 1
+          end
+        end
 
       def view_likes
         puts
@@ -88,7 +100,7 @@ class CLI
           puts "You don't have any likes!"
         end
         @menu = 2
-        puts 
+        puts
         puts "1. Remove most recent like"
         puts "2. Clear all likes"
         puts "3. Go back"
