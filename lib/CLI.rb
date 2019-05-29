@@ -1,5 +1,5 @@
 class CLI
-  attr_accessor :user_1, :menu, :random_song, :is_running
+  attr_accessor :user_1, :menu, :random_song, :is_running, :count
 
   def initialize
   end
@@ -25,22 +25,30 @@ class CLI
 
   def main_menu
     @is_running = true
+    @count = 1
     while @is_running
       @menu = 1
       if @menu == 1
         puts
-        puts "1. Give me a random song"
+        if @count == 1
+          puts "1. Let me see a random song"
+        else
+          puts "1. Let me see #{@count} random songs"
+        end
         puts "2. Let me see my liked songs"
         puts "3. Let me see my disliked songs"
-        puts "4. Exit"
+        puts "4. Settings"
+        puts "5. Exit"
           choice = STDIN.gets.chomp.to_i
           if choice == 1
-            random_song
+            random_song(@count)
           elsif choice == 2
             view_likes
           elsif choice == 3
             view_dislikes
           elsif choice == 4
+            settings
+          elsif choice == 5
             @is_running = false
           end
         end
@@ -59,14 +67,22 @@ class CLI
       updated_songs
     end
 
-      def random_song
-        @random_song = filter_songs.sample
+      def random_song(number_of_songs)
+        @random_song = filter_songs.sample(number_of_songs)
             puts
-            puts "#{@random_song.name} by: #{@random_song.artist}"
+            @random_song.each do |song|
+            puts "#{song.name} by: #{song.artist}"
+            end
             puts
-            puts "1. Save this song to my likes"
-            puts "2. Save this song to my dislikes"
-            puts "3. Go back"
+            if @count == 1
+              puts "1. Save this song to my likes"
+              puts "2. Save this song to my dislikes"
+              puts "3. Go back"
+            else
+              puts "1. Save these songs to my likes"
+              puts "2. Save these songs to my dislikes"
+              puts "3. Go back"
+            end
             puts
             saved_song
       end
@@ -75,14 +91,18 @@ class CLI
         @menu = 2
           choice_2 = STDIN.gets.chomp.to_i
           if choice_2 == 1
-            Like.create(user_id: @user_1.id, song_id: @random_song.id)
             puts
-            puts "#{@random_song.name} by: #{@random_song.artist} saved to likes!"
+            @random_song.each do |song|
+              Like.create(user_id: @user_1.id, song_id: song.id)
+              puts "#{song.name} by: #{song.artist} saved to likes!"
+            end
             @menu = 1
           elsif choice_2 == 2
-            Dislike.create(user_id: @user_1.id, song_id: @random_song.id)
             puts
-            puts "#{@random_song.name} by: #{@random_song.artist} saved to dislikes!"
+            @random_song.each do |song|
+              Dislike.create(user_id: @user_1.id, song_id: song.id)
+              puts "#{song.name} by: #{song.artist} saved to dislikes!"
+            end
             @menu = 1
           elsif choice_2 == 3
             @menu = 1
@@ -162,4 +182,18 @@ class CLI
       def clear_dislikes
         @user_1.dislikes.destroy_all
       end
+
+      def settings
+        @main = 2
+        puts
+        puts "Enter the amount of random songs you want to see at one time."
+        puts "Press any non numerical character to go back"
+        x = STDIN.gets.chomp
+          if x.to_i == 0
+            @main = 1
+          elsif x.to_i > 0
+            @count = x.to_i
+          end
+      end
+
 end
