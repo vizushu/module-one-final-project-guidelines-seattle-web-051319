@@ -96,15 +96,18 @@ class CLI
       end
       puts "4. Main menu"
       puts
-      saved_song
+      saved_song(1)
     end
 
+    #This method displays a random song or songs by a specific artist after
+    #querying the user for a specific artist to find. It also displays an error
+    #message if the name provided does not match any songs in the database
     def random_song_by_artist(number_of_songs)
       puts "Please provide an artist name:"
       puts
       artist_name = STDIN.gets.chomp
       all_artist_songs = filter_songs.select do |song|
-        song.artist.name == artist_name
+        song.artist.name.parameterize == artist_name.parameterize
       end
       @random_artist_song = all_artist_songs.sample(number_of_songs)
       if all_artist_songs.count > 0
@@ -118,8 +121,9 @@ class CLI
           CLIOutputs.multiple_random_song_options
           puts "3. Give me #{@user_1.count} more random songs by an artist"
         end
+        puts "4. Main menu"
         puts
-        saved_song_by_artist
+        saved_song(2)
       else
         puts "There are no songs by this artist"
         CLIOutputs.no_likes_dislikes_menu_options
@@ -129,63 +133,41 @@ class CLI
 
     #This method saves a song or songs to a user's likes or dislikes, or gives
     #them another random song based on which option they choose
-    def saved_song
+    def saved_song(argument)
       @menu = 2
       choice = STDIN.gets.chomp.to_i
       if choice == 1
         puts
-        saved_like
+        if argument == 1
+          saved_like(@random_song)
+        elsif argument == 2
+          saved_like(@random_artist_song)
+        end
       elsif choice == 2
         puts
-        saved_dislike
+        if argument == 1
+          saved_dislike(@random_song)
+        elsif argument == 2
+          saved_dislike(@random_artist_song)
+        end
       elsif choice == 3
-        random_song(@user_1.count)
+        puts
+        if argument == 1
+          random_song(@user_1.count)
+        elsif argument == 2
+          random_song_by_artist(@user_1.count)
+        end
       elsif choice == 4
         puts `clear`
         @menu = 1
       end
-    end
-
-    def saved_song_by_artist
-      @menu = 2
-      choice = STDIN.gets.chomp.to_i
-      if choice == 1
-        puts
-        artist_saved_like
-      elsif choice == 2
-        puts
-        artist_saved_dislike
-      elsif choice == 3
-        random_song_by_artist(@user_1.count)
-      elsif choice == 4
-        puts `clear`
-        @menu = 1
-      end
-    end
-
-    def artist_saved_like
-      puts `clear`
-      @random_artist_song.each_with_index do |song, index|
-        Like.create(user_id: @user_1.id, song_id: song.id)
-        puts "#{index+1}. #{song.name} by: #{song.artist.name} saved to likes!"
-      end
-      @menu = 1
-    end
-
-    def artist_saved_dislike
-      puts `clear`
-      @random_artist_song.each_with_index do |song, index|
-        Dislike.create(user_id: @user_1.id, song_id: song.id)
-        puts "#{index+1}. #{song.name} by: #{song.artist.name} saved to dislikes!"
-      end
-      @menu = 1
     end
 
     #This method saves a song or songs to a user's liked songs and then returns
     #the user to the main menu
-    def saved_like
+    def saved_like(song_collection)
       puts `clear`
-      @random_song.each_with_index do |song, index|
+      song_collection.each_with_index do |song, index|
         Like.create(user_id: @user_1.id, song_id: song.id)
         puts "#{index+1}. #{song.name} by: #{song.artist.name} saved to likes!"
       end
@@ -193,9 +175,9 @@ class CLI
     end
 
     #This method mimics the behavior of the saved_like method but for dislikes
-    def saved_dislike
+    def saved_dislike(song_collection)
       puts `clear`
-      @random_song.each_with_index do |song, index|
+      song_collection.each_with_index do |song, index|
         Dislike.create(user_id: @user_1.id, song_id: song.id)
         puts "#{index+1}. #{song.name} by: #{song.artist.name} saved to dislikes!"
       end
