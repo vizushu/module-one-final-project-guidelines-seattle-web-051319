@@ -85,7 +85,7 @@ class CLI
     #a user has chosen to be displayed
     def random_song(number_of_songs)
       @random_song = filter_songs.sample(number_of_songs)
-      puts
+      puts `clear`
       puts "Random song(s):"
       @random_song.each_with_index do |song, index|
         puts "#{index+1}. #{song.name} by: #{song.artist}"
@@ -145,9 +145,9 @@ class CLI
 
     #This method allows a user to see their likes
     def view_likes_dislikes(indicator)
-      puts
       @menu = 2
       @user_1.reload
+      puts `clear`
       if indicator == 1
         user_likes
       elsif indicator == 2
@@ -291,7 +291,7 @@ class CLI
     #user's count persists if they exit the program.
     def settings
       @main = 2
-      puts
+      puts `clear`
       puts "Settings:"
       puts "1. Enter the amount of random songs you want to see at one time."
       puts "2. Press any non numerical character to go back"
