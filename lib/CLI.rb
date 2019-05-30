@@ -7,7 +7,11 @@ class CLI
   #This method runs the program and is called upon in our bin/run.rb file to run
   #the application
   def run
-    puts "Welcome to the Random Song Suggestion CLI"
+    a = Artii::Base.new
+    puts a.asciify('Welcome to the')
+    sleep(1)
+    puts a.asciify('Random Song CLI')
+    sleep(1)
     puts "Please enter your username"
     puts
     get_username_and_count
