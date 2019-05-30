@@ -1,3 +1,5 @@
+![](https://media.giphy.com/media/3lxD1O74siiz5FvrJs/giphy.gif)
+
 # What the application does
 
 This CLI application allows you to see any number of random songs that you wish
