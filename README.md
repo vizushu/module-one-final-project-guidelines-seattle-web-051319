@@ -1,5 +1,4 @@
-![](https://media.giphy.com/media/3lxD1O74siiz5FvrJs/giphy.gif.gif)
-
+![](https://media.giphy.com/media/3lxD1O74siiz5FvrJs/giphy.gif)
 
 # What the application does
 
