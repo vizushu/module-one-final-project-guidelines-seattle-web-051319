@@ -1,44 +1,45 @@
 class CLI
-  attr_accessor :user_1, :menu, :random_song, :is_running, :count
+  attr_accessor :user_1, :menu, :random_song, :is_running, :preference
 
   def initialize
   end
 
+  #This method runs the program and is called upon in our bin/run.rb file to run
+  #the application
   def run
     puts "Welcome to the Random Song Suggestion CLI"
     puts "Please enter your username"
     puts
-
-    get_username
+    get_username_and_count
     main_menu
-
   end
 
-  def get_username
+ #This method gets the username and welcomes either a new or returning user
+  def get_username_and_count
     name = STDIN.gets.chomp
-      puts
-      if User.find_by_name(name) == nil
-        @user_1 = User.create(name: name)
-        puts "Welcome #{@user_1.name}."
-      else
-        @user_1 = User.find_by_name(name)
-        puts "Welcome back #{@user_1.name}!"
+    puts
+    if User.find_by_name(name) == nil
+      @user_1 = User.create(name: name, count: 1)
+      puts "Welcome #{@user_1.name}."
+    else
+      @user_1 = User.find_by_name(name)
+      puts "Welcome back #{@user_1.name}!"
     end
   end
 
+  #This method is our main menu which shows all of our main menu prompts
   def main_menu
     @is_running = true
-    @count = 1
     while @is_running
       @menu = 1
       if @menu == 1
         puts
         puts
         puts "Main menu"
-        if @count == 1
+        if @user_1.count == 1
           puts "1. Let me see a random song"
         else
-          puts "1. Let me see #{@count} random songs"
+          puts "1. Let me see #{@user_1.count} random songs"
         end
         puts "2. Let me see my liked songs"
         puts "3. Let me see my disliked songs"
@@ -49,14 +50,16 @@ class CLI
       end
     end
 
+    #This method takes a users choice in response to the previous methods prompt
+    #and takes the appropriate action
     def first_choice
         choice = STDIN.gets.chomp.to_i
       if choice == 1
-        random_song(@count)
+        random_song(@user_1.count)
       elsif choice == 2
-        view_likes
+        view_likes_dislikes(1)
       elsif choice == 3
-        view_dislikes
+        view_likes_dislikes(2)
       elsif choice == 4
         settings
       elsif choice == 5
@@ -64,6 +67,8 @@ class CLI
       end
     end
 
+    #This method allows the program to filter out songs that the user has
+    #already liked/disliked so they do not appear when the user requests a random song
     def filter_songs
       disliked_songs = @user_1.dislikes.map {|dislike| dislike.song}
       liked_songs = @user_1.likes.map {|like| like.song}
@@ -76,60 +81,126 @@ class CLI
       updated_songs
     end
 
+    #This method displays a random song or songs depending on the amount of songs
+    #a user has chosen to be displayed
     def random_song(number_of_songs)
       @random_song = filter_songs.sample(number_of_songs)
-          puts
-          puts "Random song(s):"
-          @random_song.each_with_index do |song, index|
-          puts "#{index+1}. #{song.name} by: #{song.artist}"
-          end
-          puts
-          puts "Options:"
-          if @count == 1
-            puts "1. Save this song to my likes"
-          else
-            puts "1. Save these songs to my likes"
-          end
-          puts "2. Save this song to my dislikes"
-          puts "3. Go back"
-          puts
-          saved_song
+      puts
+      puts "Random song(s):"
+      @random_song.each_with_index do |song, index|
+        puts "#{index+1}. #{song.name} by: #{song.artist}"
+      end
+      puts
+      puts "Options:"
+      if @user_1.count == 1
+        puts "1. Save this song to my likes"
+        puts "2. Save this song to my dislikes"
+        puts "3. Give me another random song"
+      else
+        puts "1. Save these songs to my likes"
+        puts "2. Save these songs to my dislikes"
+        puts "3. Give me #{@user_1.count} more random songs"
+      end
+      puts "4. Go back"
+      puts
+      saved_song
     end
 
+    #This method saves a song or songs to a user's likes or dislikes, or gives
+    #them another random song based on which option they choose
     def saved_song
       @menu = 2
-        choice_2 = STDIN.gets.chomp.to_i
-        if choice_2 == 1
-          puts
-          @random_song.each_with_index do |song, index|
-            Like.create(user_id: @user_1.id, song_id: song.id)
-            puts "#{index+1}. #{song.name} by: #{song.artist} saved to likes!"
-          end
-          @menu = 1
-        elsif choice_2 == 2
-          puts
-          @random_song.each_with_index do |song, index|
-            Dislike.create(user_id: @user_1.id, song_id: song.id)
-            puts "#{index+1}. #{song.name} by: #{song.artist} saved to dislikes!"
-          end
-          @menu = 1
-        elsif choice_2 == 3
-          @menu = 1
-        end
+      choice = STDIN.gets.chomp.to_i
+      if choice == 1
+        puts
+        saved_like
+      elsif choice == 2
+        puts
+        saved_dislike
+      elsif choice == 3
+        random_song(@user_1.count)
+      elsif choice == 4
+        @menu = 1
       end
+    end
 
-    def view_likes
+    #This method saves a song or songs to a user's liked songs and then returns
+    #the user to the main menu
+    def saved_like
+      @random_song.each_with_index do |song, index|
+        Like.create(user_id: @user_1.id, song_id: song.id)
+        puts "#{index+1}. #{song.name} by: #{song.artist} saved to likes!"
+      end
+      @menu = 1
+    end
+
+    #This method mimics the behavior of the saved_like method but for dislikes
+    def saved_dislike
+      @random_song.each_with_index do |song, index|
+        Dislike.create(user_id: @user_1.id, song_id: song.id)
+        puts "#{index+1}. #{song.name} by: #{song.artist} saved to dislikes!"
+      end
+      @menu = 1
+    end
+
+    #This method allows a user to see their likes
+    def view_likes_dislikes(indicator)
       puts
       @menu = 2
       @user_1.reload
-      if @user_1.likes.count > 0
-        user_all_likes
-      else
-        user_no_likes
+      if indicator == 1
+        user_likes
+      elsif indicator == 2
+        user_dislikes
       end
     end
 
-    def user_all_likes
+    #This method as well as user_dislikes are just methods that display a user's
+    #likes or dislikes depending on whether the user has any
+    def user_likes
+      if @user_1.likes.count > 0
+        user_all_likes_dislikes(1)
+      else
+        no_likes_dislikes(1)
+      end
+    end
+
+    def user_dislikes
+      if @user_1.dislikes.count > 0
+        user_all_likes_dislikes(2)
+      else
+        no_likes_dislikes(2)
+      end
+    end
+
+    #This method displays all of a user's liked or disliked songs and is passed
+    #an argument in
+    def user_all_likes_dislikes(indicator)
+      if indicator == 1
+        all_liked_disliked_songs(1)
+      elsif indicator == 2
+        all_liked_disliked_songs(2)
+      end
+    end
+
+    #This method displays a user's liked or disliked songs and then gives a user
+    #options to update, delete, go back, or exit the application
+    def all_liked_disliked_songs(indicator)
+      if indicator == 1
+        @preference = 1
+        all_liked_songs
+      elsif indicator == 2
+        @preference = 2
+        all_disliked_songs
+      end
+      puts "3. Go back"
+      puts "4. Exit"
+      likes_dislikes_menu
+    end
+
+    #This method is called upon in all_liked_disliked_songs and displays all of
+    #a user's liked songs
+    def all_liked_songs
       puts "Liked song(s):"
       @user_1.likes.each_with_index do |like, index|
         puts "#{index+1}. #{like.song.name} by: #{like.song.artist}"
@@ -138,54 +209,12 @@ class CLI
       puts "Options:"
       puts "1. Remove most recent like"
       puts "2. Clear all likes"
-      puts "3. Go back"
-      puts "4. Exit"
-      choice_3 = STDIN.gets.chomp.to_i
-      if choice_3 == 1
-        remove_recent_like
-      elsif choice_3 == 2
-        clear_likes
-      elsif choice_3 == 3
-        @menu = 1
-      elsif choice_3 == 4
-        @is_running = false
-      end
     end
 
-    def user_no_likes
-      puts "You don't have any liked songs!"
-      puts
-      puts "Options:"
-      puts "1. Go back"
-      puts "2. Exit"
-      choice_3 = STDIN.gets.chomp.to_i
-      if choice_3 == 1
-        @menu = 1
-      elsif choice_3 == 2
-        @is_running = false
-      end
-    end
-
-    def remove_recent_like
-      @user_1.reload
-      @user_1.likes.last.destroy
-    end
-
-    def clear_likes
-      @user_1.likes.destroy_all
-    end
-
-    def view_dislikes
-      puts
-      @user_1.reload
-      if @user_1.dislikes.count > 0
-        user_all_dislikes
-      else
-        user_no_dislikes
-      end
-    end
-
-    def user_all_dislikes
+    #This method is called upon in all_liked_disliked_songs and displays all of
+    #a user's disliked songs
+    def all_disliked_songs
+      @preference = 2
       puts "Disliked song(s):"
       @user_1.dislikes.each_with_index do |dislike, index|
         puts "#{index+1}. #{dislike.song.name} by: #{dislike.song.artist}"
@@ -194,13 +223,16 @@ class CLI
       puts "Options::"
       puts "1. Remove most recent dislike"
       puts "2. Clear all dislikes"
-      puts "3. Go back"
-      puts "4. Exit"
+    end
+
+    #This method is used to give a user the update, delete, go back, and exit
+    #options when viewing their liked or disliked songs
+    def likes_dislikes_menu
       choice_3 = STDIN.gets.chomp.to_i
       if choice_3 == 1
-        remove_recent_dislike
+        remove_recent_like_dislike(@preference)
       elsif choice_3 == 2
-        clear_dislikes
+        clear_likes_dislikes(@preference)
       elsif choice_3 == 3
         @menu = 1
       elsif choice_3 == 4
@@ -208,12 +240,24 @@ class CLI
       end
     end
 
-    def user_no_dislikes
-      puts "You don't have any disliked songs!"
+    #This method tells a user that they do not have any liked or disliked songs
+    #It is called on if a user has 0 likes or dislikes and asks to see their liked
+    #or disliked songs
+    def no_likes_dislikes(indicator)
+      if indicator == 1
+        puts "You don't have any liked songs!"
+      elsif indicator == 2
+        puts "You don't have any disliked songs!"
+      end
       puts
       puts "Options:"
       puts "1. Go back"
       puts "2. Exit"
+      no_likes_dislikes_menu
+    end
+
+    #This method either takes the user back to the main menu or closes the application
+    def no_likes_dislikes_menu
       choice_3 = STDIN.gets.chomp.to_i
       if choice_3 == 1
         @menu = 1
@@ -222,27 +266,42 @@ class CLI
       end
     end
 
-    def remove_recent_dislike
+    #This method allows a user to remove the most recent liked or disliked song
+    def remove_recent_like_dislike(indicator)
       @user_1.reload
-      @user_1.dislikes.last.destroy
+      if indicator == 1
+        @user_1.likes.last.destroy
+      elsif indicator == 2
+        @user_1.dislikes.last.destroy
+      end
     end
 
-    def clear_dislikes
-      @user_1.dislikes.destroy_all
+    #This method will clear a user's likes or dislikes and is called when a user
+    #chooses to clear all of their likes or dislikes
+    def clear_likes_dislikes(indicator)
+      if indicator == 1
+        @user_1.likes.destroy_all
+      elsif indicator == 2
+        @user_1.dislikes.destroy_all
+      end
     end
 
+    #This method is the settings menu where a user can modify the amount of
+    #random songs that are displayed this modifies the database as well so the
+    #user's count persists if they exit the program.
     def settings
       @main = 2
       puts
       puts "Settings:"
-      puts "Enter the amount of random songs you want to see at one time."
-      puts "Press any non numerical character to go back"
+      puts "1. Enter the amount of random songs you want to see at one time."
+      puts "2. Press any non numerical character to go back"
       x = STDIN.gets.chomp
-        if x.to_i == 0
-          @main = 1
-        elsif x.to_i > 0
-          @count = x.to_i
-        end
+      if x.to_i == 0
+        @main = 1
+      elsif x.to_i > 0
+        @user_1.count = x.to_i
+        @user_1.save
+      end
     end
 
 end
