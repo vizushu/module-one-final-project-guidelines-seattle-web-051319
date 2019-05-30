@@ -14,7 +14,6 @@ end
   def create_artists(song_data)
     song_data["tracks"]["track"].each do |track|
       if Artist.all.include?(Artist.find_by_name(track["artist"]["name"]))
-
       else
         Artist.create(name: track["artist"]["name"])
       end
