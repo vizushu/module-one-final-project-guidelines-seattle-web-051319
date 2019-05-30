@@ -10,7 +10,7 @@ class CLI
     a = Artii::Base.new
     puts a.asciify('Welcome to the')
     sleep(1)
-    puts a.asciify('Random Song CLI')
+    puts a.asciify('Random Song CLI!')
     sleep(1)
     puts "Please enter your username"
     puts
