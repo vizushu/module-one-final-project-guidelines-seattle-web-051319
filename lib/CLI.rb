@@ -1,13 +1,19 @@
 class CLI
-  attr_accessor :user_1, :menu, :random_song, :is_running, :preference
+  attr_accessor :user_1, :menu, :random_song, :is_running, :preference, :a
 
   def initialize
+    @a = Artii::Base.new
   end
 
   #This method runs the program and is called upon in our bin/run.rb file to run
-  #the application
+  #the application it also displays a welcome message and asks the user to enter
+  #a username
   def run
-    puts "Welcome to the Random Song Suggestion CLI"
+    b = Artii::Base.new :font => 'slant'
+    puts b.asciify('Welcome to the')
+    sleep(1)
+    puts b.asciify('Random Song CLI !')
+    sleep(1)
     puts "Please enter your username"
     puts
     get_username_and_count
@@ -32,10 +38,11 @@ class CLI
     @is_running = true
     while @is_running
       @menu = 1
+      puts `clear`
       if @menu == 1
         puts
         puts
-        puts "Main menu"
+        puts @a.asciify('Main menu')
         if @user_1.count == 1
           puts "1. Let me see a random song"
         else
@@ -91,7 +98,7 @@ class CLI
         puts "#{index+1}. #{song.name} by: #{song.artist}"
       end
       puts
-      puts "Options:"
+      puts @a.asciify('Options')
       if @user_1.count == 1
         puts "1. Save this song to my likes"
         puts "2. Save this song to my dislikes"
@@ -206,7 +213,7 @@ class CLI
         puts "#{index+1}. #{like.song.name} by: #{like.song.artist}"
       end
       puts
-      puts "Options:"
+      puts @a.asciify('Options')
       puts "1. Remove most recent like"
       puts "2. Clear all likes"
     end
@@ -220,7 +227,7 @@ class CLI
         puts "#{index+1}. #{dislike.song.name} by: #{dislike.song.artist}"
       end
       puts
-      puts "Options::"
+      puts @a.asciify('Options')
       puts "1. Remove most recent dislike"
       puts "2. Clear all dislikes"
     end
@@ -250,7 +257,7 @@ class CLI
         puts "You don't have any disliked songs!"
       end
       puts
-      puts "Options:"
+      puts @a.asciify('Options')
       puts "1. Go back"
       puts "2. Exit"
       no_likes_dislikes_menu
@@ -292,7 +299,7 @@ class CLI
     def settings
       @main = 2
       puts `clear`
-      puts "Settings:"
+      puts @a.asciify('Settings')
       puts "1. Enter the amount of random songs you want to see at one time."
       puts "2. Press any non numerical character to go back"
       x = STDIN.gets.chomp
