@@ -2,20 +2,14 @@ class CLI
   attr_accessor :user_1, :menu, :random_song, :is_running, :preference, :a
 
   def initialize
-    @a = Artii::Base.new
+
   end
 
   #This method runs the program and is called upon in our bin/run.rb file to run
   #the application it also displays a welcome message and asks the user to enter
   #a username
   def run
-    b = Artii::Base.new :font => 'slant'
-    puts b.asciify('Welcome to the')
-    sleep(1)
-    puts b.asciify('Random Song CLI !')
-    sleep(1)
-    puts "Please enter your username"
-    puts
+    CLIOutputs.welcome
     get_username_and_count
     main_menu
   end
@@ -40,18 +34,13 @@ class CLI
       @menu = 1
       puts `clear`
       if @menu == 1
-        puts
-        puts
-        puts @a.asciify('Main menu')
+          CLIOutputs.main_menu
         if @user_1.count == 1
           puts "1. Let me see a random song"
         else
           puts "1. Let me see #{@user_1.count} random songs"
         end
-        puts "2. Let me see my liked songs"
-        puts "3. Let me see my disliked songs"
-        puts "4. Settings"
-        puts "5. Exit"
+        CLIOutputs.main_menu_options
         first_choice
         end
       end
@@ -92,20 +81,15 @@ class CLI
     #a user has chosen to be displayed
     def random_song(number_of_songs)
       @random_song = filter_songs.sample(number_of_songs)
-      puts `clear`
-      puts "Random song(s):"
+      CLIOutputs.random_song_title
       @random_song.each_with_index do |song, index|
         puts "#{index+1}. #{song.name} by: #{song.artist}"
       end
-      puts
-      puts @a.asciify('Options')
+      CLIOutputs.options
       if @user_1.count == 1
-        puts "1. Save this song to my likes"
-        puts "2. Save this song to my dislikes"
-        puts "3. Give me another random song"
+        CLIOutputs.one_random_song_options
       else
-        puts "1. Save these songs to my likes"
-        puts "2. Save these songs to my dislikes"
+        CLIOutputs.multiple_random_song_options
         puts "3. Give me #{@user_1.count} more random songs"
       end
       puts "4. Go back"
@@ -200,36 +184,28 @@ class CLI
         @preference = 2
         all_disliked_songs
       end
-      puts "3. Go back"
-      puts "4. Exit"
       likes_dislikes_menu
     end
 
     #This method is called upon in all_liked_disliked_songs and displays all of
     #a user's liked songs
     def all_liked_songs
-      puts "Liked song(s):"
+      CLIOutputs.liked_songs_title
       @user_1.likes.each_with_index do |like, index|
         puts "#{index+1}. #{like.song.name} by: #{like.song.artist}"
       end
-      puts
-      puts @a.asciify('Options')
-      puts "1. Remove most recent like"
-      puts "2. Clear all likes"
+      CLIOutputs.likes_menu_options
     end
 
     #This method is called upon in all_liked_disliked_songs and displays all of
     #a user's disliked songs
     def all_disliked_songs
       @preference = 2
-      puts "Disliked song(s):"
+      CLIOutputs.disliked_songs_title
       @user_1.dislikes.each_with_index do |dislike, index|
         puts "#{index+1}. #{dislike.song.name} by: #{dislike.song.artist}"
       end
-      puts
-      puts @a.asciify('Options')
-      puts "1. Remove most recent dislike"
-      puts "2. Clear all dislikes"
+      CLIOutputs.dislikes_menu_options
     end
 
     #This method is used to give a user the update, delete, go back, and exit
@@ -256,10 +232,7 @@ class CLI
       elsif indicator == 2
         puts "You don't have any disliked songs!"
       end
-      puts
-      puts @a.asciify('Options')
-      puts "1. Go back"
-      puts "2. Exit"
+      CLIOutputs.no_likes_dislikes_menu_options
       no_likes_dislikes_menu
     end
 
@@ -298,10 +271,7 @@ class CLI
     #user's count persists if they exit the program.
     def settings
       @main = 2
-      puts `clear`
-      puts @a.asciify('Settings')
-      puts "1. Enter the amount of random songs you want to see at one time."
-      puts "2. Press any non numerical character to go back"
+      CLIOutputs.settings_menu
       x = STDIN.gets.chomp
       if x.to_i == 0
         @main = 1
