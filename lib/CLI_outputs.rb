@@ -26,10 +26,10 @@ class CLIOutputs
   end
 
   def self.main_menu_options
-    puts "2. Let me see my liked songs"
-    puts "3. Let me see my disliked songs"
-    puts "4. Settings"
-    puts "5. Exit"
+    puts "3. Let me see my liked songs"
+    puts "4. Let me see my disliked songs"
+    puts "5. Settings"
+    puts "6. Exit"
   end
 
   def self.random_song_title
@@ -41,6 +41,12 @@ class CLIOutputs
     puts "1. Save this song to my likes"
     puts "2. Save this song to my dislikes"
     puts "3. Give me another random song"
+  end
+
+  def self.one_random_song_by_artist_options
+    puts "1. Save this song to my likes"
+    puts "2. Save this song to my dislikes"
+    puts "3. Give me another random song by an artist"
   end
 
   def self.multiple_random_song_options
@@ -56,7 +62,7 @@ class CLIOutputs
     self.options
     puts "1. Remove most recent like"
     puts "2. Clear all likes"
-    puts "3. Go back"
+    puts "3. Main menu"
     puts "4. Exit"
   end
 
@@ -68,13 +74,13 @@ class CLIOutputs
     self.options
     puts "1. Remove most recent dislike"
     puts "2. Clear all dislikes"
-    puts "3. Go back"
+    puts "3. Main menu"
     puts "4. Exit"
   end
 
   def self.no_likes_dislikes_menu_options
     self.options
-    puts "1. Go back"
+    puts "1. Main menu"
     puts "2. Exit"
   end
 
