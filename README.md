@@ -23,10 +23,14 @@ you first need to follow the instructions below to add your api key.
  --- You will need your own last.fm api key to seed your database with the
  appropriate information
 
+ --- If you do not already have a last.fm api key, you can sign up for an api
+ account here: [Last.fm api signup](https://secure.last.fm/login?next=/api/account/create)
+
  --- In the API_KEY.rb.sample file you can enter your own api key in the
  'your api key here' field
 
- --- Then save the file as API_KEY.rb
+ --- Then save the file as API_KEY.rb (removing the .sample from the end of the
+   filename)
 
  --- This will allow you to populate your database with songs from the last.fm
  api
@@ -34,7 +38,10 @@ you first need to follow the instructions below to add your api key.
 ## Populating the database
 
 After adding your api key you need to enter the command rake db:seed in your
-terminal so that the database is seeded with the proper information.
+terminal so that the database is seeded with the proper information. This command
+needs to be entered from the module-one-final-project-guidelines-seattle-web-051319
+directory (make sure that you are in the correct directory before entering this
+command)
 
 At this point you can run the program using the instructions below.
 
