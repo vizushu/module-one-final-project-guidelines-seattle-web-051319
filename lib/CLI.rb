@@ -5,7 +5,8 @@ class CLI
   end
 
   #This method runs the program and is called upon in our bin/run.rb file to run
-  #the application
+  #the application it also displays a welcome message and asks the user to enter
+  #a username
   def run
     a = Artii::Base.new
     puts a.asciify('Welcome to the')
