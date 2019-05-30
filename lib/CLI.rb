@@ -1,5 +1,5 @@
 class CLI
-  attr_accessor :user_1, :menu, :random_song, :is_running, :count, :preference
+  attr_accessor :user_1, :menu, :random_song, :is_running, :preference
 
   def initialize
   end
@@ -10,16 +10,16 @@ class CLI
     puts "Welcome to the Random Song Suggestion CLI"
     puts "Please enter your username"
     puts
-    get_username
+    get_username_and_count
     main_menu
   end
 
  #This method gets the username and welcomes either a new or returning user
-  def get_username
+  def get_username_and_count
     name = STDIN.gets.chomp
     puts
     if User.find_by_name(name) == nil
-      @user_1 = User.create(name: name)
+      @user_1 = User.create(name: name, count: 1)
       puts "Welcome #{@user_1.name}."
     else
       @user_1 = User.find_by_name(name)
@@ -30,17 +30,16 @@ class CLI
   #This method is our main menu which shows all of our main menu prompts
   def main_menu
     @is_running = true
-    @count = 1
     while @is_running
       @menu = 1
       if @menu == 1
         puts
         puts
         puts "Main menu"
-        if @count == 1
+        if @user_1.count == 1
           puts "1. Let me see a random song"
         else
-          puts "1. Let me see #{@count} random songs"
+          puts "1. Let me see #{@user_1.count} random songs"
         end
         puts "2. Let me see my liked songs"
         puts "3. Let me see my disliked songs"
@@ -56,7 +55,7 @@ class CLI
     def first_choice
         choice = STDIN.gets.chomp.to_i
       if choice == 1
-        random_song(@count)
+        random_song(@user_1.count)
       elsif choice == 2
         view_likes_dislikes(1)
       elsif choice == 3
@@ -93,14 +92,15 @@ class CLI
       end
       puts
       puts "Options:"
-      if @count == 1
+      if @user_1.count == 1
         puts "1. Save this song to my likes"
         puts "2. Save this song to my dislikes"
+        puts "3. Give me another random song"
       else
         puts "1. Save these songs to my likes"
         puts "2. Save these songs to my dislikes"
+        puts "3. Give me #{@user_1.count} more random songs"
       end
-      puts "3. Give me another random song"
       puts "4. Go back"
       puts
       saved_song
@@ -118,7 +118,7 @@ class CLI
         puts
         saved_dislike
       elsif choice == 3
-        random_song(@count)
+        random_song(@user_1.count)
       elsif choice == 4
         @menu = 1
       end
@@ -287,7 +287,8 @@ class CLI
     end
 
     #This method is the settings menu where a user can modify the amount of
-    #random songs that are displayed
+    #random songs that are displayed this modifies the database as well so the
+    #user's count persists if they exit the program.
     def settings
       @main = 2
       puts
@@ -298,7 +299,8 @@ class CLI
       if x.to_i == 0
         @main = 1
       elsif x.to_i > 0
-        @count = x.to_i
+        @user_1.count = x.to_i
+        @user_1.save
       end
     end
 
