@@ -99,6 +99,9 @@ class CLI
       saved_song
     end
 
+    #This method displays a random song or songs by a specific artist after
+    #querying the user for a specific artist to find. It also displays an error
+    #message if the name provided does not match any songs in the database
     def random_song_by_artist(number_of_songs)
       puts "Please provide an artist name:"
       puts
@@ -146,6 +149,8 @@ class CLI
       end
     end
 
+    #This method performs the same function as the above method but for random
+    #songs suggested by artist
     def saved_song_by_artist
       @menu = 2
       choice = STDIN.gets.chomp.to_i
@@ -163,6 +168,8 @@ class CLI
       end
     end
 
+    #Similarly to the saved_like method below, this method saves a song that the
+    #user is presented through the random_song_by_artist method
     def artist_saved_like
       puts `clear`
       @random_artist_song.each_with_index do |song, index|
@@ -172,6 +179,8 @@ class CLI
       @menu = 1
     end
 
+    #Much like the saved_dislike method, this method also saves a song to the
+    #user's dislikes and returns to the main menu
     def artist_saved_dislike
       puts `clear`
       @random_artist_song.each_with_index do |song, index|
