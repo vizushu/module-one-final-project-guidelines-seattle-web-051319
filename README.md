@@ -1,7 +1,4 @@
-#What the application does
-
-**Visual Representation:**
-(https://media.giphy.com/media/3lxD1O74siiz5FvrJs/giphy.gif)
+# What the application does
 
 This CLI application allows you to see any number of random songs that you wish
 up to the total amount of songs in the database. When you see a random song or
@@ -17,12 +14,12 @@ likes/dislikes and clear all of your likes/dislikes.
 The settings page allows you to change the amount of random songs that are
 suggested when you request a random song.
 
-#Installation Instructions
+# Installation Instructions
 
 You will need to populate the database with data from the last.fm api to do that
 you first need to follow the instructions below to add your api key.
 
-##How to use your own api key
+## How to use your own api key
  --- You will need your own last.fm api key to seed your database with the
  appropriate information
 
@@ -34,22 +31,22 @@ you first need to follow the instructions below to add your api key.
  --- This will allow you to populate your database with songs from the last.fm
  api
 
-##Populating the database
+## Populating the database
 
 After adding your api key you need to enter the command rake db:seed in your
 terminal so that the database is seeded with the proper information.
 
 At this point you can run the program using the instructions below.
 
-##How to run it
+## How to run it
 
 Run the run.rb file located in the bin folder.
 
-#Contributors Guide
+# Contributors Guide
 
 @AustinBH
 @vizushu
 
-#License
+# License
 
-**License:** (http://learn.co/content-license)
+**License:** [Learn.co License](http://learn.co/content-license)
