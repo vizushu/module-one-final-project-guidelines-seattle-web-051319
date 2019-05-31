@@ -37,8 +37,8 @@ you first need to follow the instructions below to add your api key.
 
 ## Populating the database
 
-After adding your api key you need to enter the command rake db:seed in your
-terminal so that the database is seeded with the proper information. This command
+After adding your api key you need to enter the commands rake db: migrate then rake db:seed in your
+terminal so that the database is seeded with the proper information. These commands
 needs to be entered from the module-one-final-project-guidelines-seattle-web-051319
 directory (make sure that you are in the correct directory before entering this
 command)
@@ -55,5 +55,7 @@ Run the run.rb file located in the bin folder.
 @vizushu
 
 # License
-
-**License:** [Learn.co License](http://learn.co/content-license)
+ 
+**License:** 
+[The MIT License](https://github.com/miketierney/artii)
+[Learn.co License](http://learn.co/content-license)
