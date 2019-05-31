@@ -1,7 +1,8 @@
 # What the application does
 
 **VISUAL REPRESENTATION**
-![Alt Text](https://media.giphy.com/media/3lxD1O74siiz5FvrJs/giphy.gif)
+
+![](https://media.giphy.com/media/NU8tcjnPaODTy/giphy.gif)
 
 This CLI application allows you to see any number of random songs that you wish
 up to the total amount of songs in the database. When you see a random song or
