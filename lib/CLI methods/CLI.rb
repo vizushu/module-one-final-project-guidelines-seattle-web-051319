@@ -70,24 +70,10 @@ class CLI
       end
     end
 
-    #This method allows the program to filter out songs that the user has
-    #already liked/disliked so they do not appear when the user requests a random song
-    def filter_songs
-      disliked_songs = @@user_1.dislikes.map {|dislike| dislike.song}
-      liked_songs = @@user_1.likes.map {|like| like.song}
-      removed_dislikes = Song.all.select do |song|
-        disliked_songs.include?(song) == false
-      end
-      updated_songs = removed_dislikes.select do |song|
-        liked_songs.include?(song) == false
-      end
-      updated_songs
-    end
-
     #This method displays a random song or songs depending on the amount of songs
     #a user has chosen to be displayed
     def random_song(number_of_songs)
-      @random_song = filter_songs.sample(number_of_songs)
+      @random_song = CLIMethods.filter_songs.sample(number_of_songs)
       CLIOutputs.random_song_title
       @random_song.each_with_index do |song, index|
         puts "#{index+1}. #{song.name} by: #{song.artist.name}"
@@ -111,7 +97,7 @@ class CLI
       puts "Please provide an artist name:"
       puts
       artist_name = STDIN.gets.chomp
-      all_artist_songs = filter_songs.select do |song|
+      all_artist_songs = CLIMethods.filter_songs.select do |song|
         song.artist.name.parameterize == artist_name.parameterize
       end
       @random_artist_song = all_artist_songs.sample(number_of_songs)
@@ -121,7 +107,7 @@ class CLI
           puts "#{index+1}. #{song.name}"
         end
         CLIOutputs.options
-        if @@user_1.count == 1
+        if @random_artist_song.count == 1
           CLIOutputs.one_random_song_by_artist_options
         else
           CLIOutputs.multiple_random_song_options
@@ -177,27 +163,27 @@ class CLI
       @@user_1.reload
       puts `clear`
       if indicator == 1
-        user_likes
+        user_likes_dislikes(1)
       elsif indicator == 2
-        user_dislikes
+        user_likes_dislikes(2)
       end
     end
 
-    #This method as well as user_dislikes are just methods that display a user's
-    #likes or dislikes depending on whether the user has any
-    def user_likes
-      if @@user_1.likes.count > 0
-        user_all_likes_dislikes(1)
-      else
-        no_likes_dislikes(1)
-      end
-    end
-
-    def user_dislikes
-      if @@user_1.dislikes.count > 0
-        user_all_likes_dislikes(2)
-      else
-        no_likes_dislikes(2)
+    #This method will display a user's likes or dislikes depending on whether
+    #the user has any
+    def user_likes_dislikes(preference)
+      if preference == 1
+        if @@user_1.likes.count > 0
+          user_all_likes_dislikes(1)
+        else
+          no_likes_dislikes(1)
+        end
+      elsif preference == 2
+        if @@user_1.dislikes.count > 0
+          user_all_likes_dislikes(2)
+        else
+          no_likes_dislikes(2)
+        end
       end
     end
 
@@ -216,33 +202,12 @@ class CLI
     def all_liked_disliked_songs(indicator)
       if indicator == 1
         @preference = 1
-        all_liked_songs
+        CLIMethods.liked_disliked_songs(1)
       elsif indicator == 2
         @preference = 2
-        all_disliked_songs
+        CLIMethods.liked_disliked_songs(2)
       end
       likes_dislikes_menu
-    end
-
-    #This method is called upon in all_liked_disliked_songs and displays all of
-    #a user's liked songs
-    def all_liked_songs
-      CLIOutputs.liked_songs_title
-      @@user_1.likes.each_with_index do |like, index|
-        puts "#{index+1}. #{like.song.name} by: #{like.song.artist.name}"
-      end
-      CLIOutputs.likes_menu_options
-    end
-
-    #This method is called upon in all_liked_disliked_songs and displays all of
-    #a user's disliked songs
-    def all_disliked_songs
-      @preference = 2
-      CLIOutputs.disliked_songs_title
-      @@user_1.dislikes.each_with_index do |dislike, index|
-        puts "#{index+1}. #{dislike.song.name} by: #{dislike.song.artist.name}"
-      end
-      CLIOutputs.dislikes_menu_options
     end
 
     #This method is used to give a user the update, delete, go back, and exit
