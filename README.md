@@ -1,5 +1,8 @@
 # What the application does
 
+**Walkthrough Example**
+[Video Walkthrough](https://www.youtube.com/watch?v=xIjL2hcf-eg)
+
 **VISUAL REPRESENTATION**
 
 ![](https://media.giphy.com/media/NU8tcjnPaODTy/giphy.gif)
