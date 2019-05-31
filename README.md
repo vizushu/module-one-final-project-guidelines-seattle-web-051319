@@ -43,6 +43,10 @@ you first need to follow the instructions below to add your api key.
 
 ## Populating the database
 
+Don't be like Drake here, remember to migrate before you seed.
+
+![](https://media.giphy.com/media/kbbwolMdDQKO8p135q/giphy.gif)
+
 After adding your api key you need to enter the commands rake db: migrate then rake db:seed in your
 terminal so that the database is seeded with the proper information. These commands
 needs to be entered from the module-one-final-project-guidelines-seattle-web-051319
@@ -64,6 +68,10 @@ Run the run.rb file located in the bin folder. (Execute Ruby bin/run.rb in your 
 
 # License
  
-**License:** 
-[The MIT License](https://github.com/miketierney/artii)
-[Learn.co License](http://learn.co/content-license)
+#Learn.co Educational Content License
+
+Copyright (c) 2015 Flatiron School, Inc
+
+The Flatiron School, Inc. owns this Educational Content. However, the Flatiron School supports the development and availability of educational materials in the public domain. Therefore, the Flatiron School grants Users of the Flatiron Educational Content set forth in this repository certain rights to reuse, build upon and share such Educational Content subject to the terms of the Educational Content License set forth here (http://learn.co/content-license). You must read carefully the terms and conditions contained in the Educational Content License as such terms govern access to and use of the Educational Content.
+
+Flatiron School is willing to allow you access to and use of the Educational Content only on the condition that you accept all of the terms and conditions contained in the Educational Content License set forth here (http://learn.co/content-license). By accessing and/or using the Educational Content, you are agreeing to all of the terms and conditions contained in the Educational Content License. If you do not agree to any or all of the terms of the Educational Content License, you are prohibited from accessing, reviewing or using in any way the Educational Content.
