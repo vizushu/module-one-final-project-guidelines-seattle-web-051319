@@ -1,7 +1,8 @@
 # What the application does
 
-**Walkthrough Example**
-[Video Walkthrough](https://www.youtube.com/watch?v=xIjL2hcf-eg)
+**Walkthrough Example:**
+
+[Youtube Link](https://www.youtube.com/watch?v=xIjL2hcf-eg)
 
 **VISUAL REPRESENTATION**
 
