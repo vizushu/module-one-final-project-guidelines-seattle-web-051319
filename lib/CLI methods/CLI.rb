@@ -70,24 +70,10 @@ class CLI
       end
     end
 
-    #This method allows the program to filter out songs that the user has
-    #already liked/disliked so they do not appear when the user requests a random song
-    def filter_songs
-      disliked_songs = @@user_1.dislikes.map {|dislike| dislike.song}
-      liked_songs = @@user_1.likes.map {|like| like.song}
-      removed_dislikes = Song.all.select do |song|
-        disliked_songs.include?(song) == false
-      end
-      updated_songs = removed_dislikes.select do |song|
-        liked_songs.include?(song) == false
-      end
-      updated_songs
-    end
-
     #This method displays a random song or songs depending on the amount of songs
     #a user has chosen to be displayed
     def random_song(number_of_songs)
-      @random_song = filter_songs.sample(number_of_songs)
+      @random_song = CLIMethods.filter_songs.sample(number_of_songs)
       CLIOutputs.random_song_title
       @random_song.each_with_index do |song, index|
         puts "#{index+1}. #{song.name} by: #{song.artist.name}"
@@ -111,7 +97,7 @@ class CLI
       puts "Please provide an artist name:"
       puts
       artist_name = STDIN.gets.chomp
-      all_artist_songs = filter_songs.select do |song|
+      all_artist_songs = CLIMethods.filter_songs.select do |song|
         song.artist.name.parameterize == artist_name.parameterize
       end
       @random_artist_song = all_artist_songs.sample(number_of_songs)
