@@ -43,6 +43,10 @@ you first need to follow the instructions below to add your api key.
 
 ## Populating the database
 
+Don't be like Drake here, remember to migrate before you seed.
+
+![](https://media.giphy.com/media/kbbwolMdDQKO8p135q/giphy.gif)
+
 After adding your api key you need to enter the commands rake db: migrate then rake db:seed in your
 terminal so that the database is seeded with the proper information. These commands
 needs to be entered from the module-one-final-project-guidelines-seattle-web-051319
