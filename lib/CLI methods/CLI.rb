@@ -284,6 +284,7 @@ class CLI
         @@user_1.count = x.to_i
         @@user_1.save
       end
+      puts `clear`
     end
 
 end
