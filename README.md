@@ -1,6 +1,8 @@
-![](https://media.giphy.com/media/3lxD1O74siiz5FvrJs/giphy.gif)
-
 # What the application does
+
+**VISUAL REPRESENTATION**
+
+![](https://media.giphy.com/media/NU8tcjnPaODTy/giphy.gif)
 
 This CLI application allows you to see any number of random songs that you wish
 up to the total amount of songs in the database. When you see a random song or
@@ -17,6 +19,8 @@ The settings page allows you to change the amount of random songs that are
 suggested when you request a random song.
 
 # Installation Instructions
+
+![](https://media.giphy.com/media/13HBDT4QSTpveU/giphy.gif)
 
 You will need to populate the database with data from the last.fm api to do that
 you first need to follow the instructions below to add your api key.
@@ -49,7 +53,9 @@ At this point you can run the program using the instructions below.
 
 ## How to run it
 
-Run the run.rb file located in the bin folder.
+![](https://media.giphy.com/media/gQJyPqc6E4xoc/giphy.gif)
+
+Run the run.rb file located in the bin folder. (Execute Ruby bin/run.rb in your terminal.)
 
 # Contributors Guide
 
@@ -57,7 +63,7 @@ Run the run.rb file located in the bin folder.
 @vizushu
 
 # License
-
+ 
 **License:** 
 [The MIT License](https://github.com/miketierney/artii)
 [Learn.co License](http://learn.co/content-license)
