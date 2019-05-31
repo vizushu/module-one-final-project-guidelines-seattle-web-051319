@@ -20,6 +20,8 @@ suggested when you request a random song.
 
 # Installation Instructions
 
+![](https://media.giphy.com/media/13HBDT4QSTpveU/giphy.gif)
+
 You will need to populate the database with data from the last.fm api to do that
 you first need to follow the instructions below to add your api key.
 
