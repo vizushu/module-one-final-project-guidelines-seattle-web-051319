@@ -121,7 +121,7 @@ class CLI
           puts "#{index+1}. #{song.name}"
         end
         CLIOutputs.options
-        if @@user_1.count == 1
+        if @random_artist_song.count == 1
           CLIOutputs.one_random_song_by_artist_options
         else
           CLIOutputs.multiple_random_song_options
@@ -177,27 +177,27 @@ class CLI
       @@user_1.reload
       puts `clear`
       if indicator == 1
-        user_likes
+        user_likes_dislikes(1)
       elsif indicator == 2
-        user_dislikes
+        user_likes_dislikes(2)
       end
     end
 
-    #This method as well as user_dislikes are just methods that display a user's
-    #likes or dislikes depending on whether the user has any
-    def user_likes
-      if @@user_1.likes.count > 0
-        user_all_likes_dislikes(1)
-      else
-        no_likes_dislikes(1)
-      end
-    end
-
-    def user_dislikes
-      if @@user_1.dislikes.count > 0
-        user_all_likes_dislikes(2)
-      else
-        no_likes_dislikes(2)
+    #This method will display a user's likes or dislikes depending on whether
+    #the user has any
+    def user_likes_dislikes(preference)
+      if preference == 1
+        if @@user_1.likes.count > 0
+          user_all_likes_dislikes(1)
+        else
+          no_likes_dislikes(1)
+        end
+      elsif preference == 2
+        if @@user_1.dislikes.count > 0
+          user_all_likes_dislikes(2)
+        else
+          no_likes_dislikes(2)
+        end
       end
     end
 
@@ -216,33 +216,30 @@ class CLI
     def all_liked_disliked_songs(indicator)
       if indicator == 1
         @preference = 1
-        all_liked_songs
+        liked_disliked_songs(1)
       elsif indicator == 2
         @preference = 2
-        all_disliked_songs
+        liked_disliked_songs(2)
       end
       likes_dislikes_menu
     end
 
     #This method is called upon in all_liked_disliked_songs and displays all of
     #a user's liked songs
-    def all_liked_songs
-      CLIOutputs.liked_songs_title
-      @@user_1.likes.each_with_index do |like, index|
-        puts "#{index+1}. #{like.song.name} by: #{like.song.artist.name}"
+    def liked_disliked_songs(preference)
+      if preference == 1
+        CLIOutputs.liked_songs_title
+        @@user_1.likes.each_with_index do |like, index|
+          puts "#{index+1}. #{like.song.name} by: #{like.song.artist.name}"
+        end
+        CLIOutputs.likes_menu_options
+      elsif preference == 2
+        CLIOutputs.disliked_songs_title
+        @@user_1.dislikes.each_with_index do |dislike, index|
+          puts "#{index+1}. #{dislike.song.name} by: #{dislike.song.artist.name}"
+        end
+        CLIOutputs.dislikes_menu_options
       end
-      CLIOutputs.likes_menu_options
-    end
-
-    #This method is called upon in all_liked_disliked_songs and displays all of
-    #a user's disliked songs
-    def all_disliked_songs
-      @preference = 2
-      CLIOutputs.disliked_songs_title
-      @@user_1.dislikes.each_with_index do |dislike, index|
-        puts "#{index+1}. #{dislike.song.name} by: #{dislike.song.artist.name}"
-      end
-      CLIOutputs.dislikes_menu_options
     end
 
     #This method is used to give a user the update, delete, go back, and exit
