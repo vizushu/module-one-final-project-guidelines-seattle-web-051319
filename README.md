@@ -22,6 +22,9 @@ suggested when you request a random song.
 
 ![](https://media.giphy.com/media/13HBDT4QSTpveU/giphy.gif)
 
+To begin, navigate to this application's directory (module-one-final-project-guidelines-seattle-web-051319) and then
+enter 'bundle install' in your terminal.
+
 You will need to populate the database with data from the last.fm api to do that
 you first need to follow the instructions below to add your api key.
 
