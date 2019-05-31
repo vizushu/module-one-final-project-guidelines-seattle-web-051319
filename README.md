@@ -53,7 +53,7 @@ At this point you can run the program using the instructions below.
 
 ![](https://media.giphy.com/media/gQJyPqc6E4xoc/giphy.gif)
 
-Run the run.rb file located in the bin folder. Execute Ruby bin/run.rb in your terminal.
+Run the run.rb file located in the bin folder. (Execute Ruby bin/run.rb in your terminal.)
 
 # Contributors Guide
 
