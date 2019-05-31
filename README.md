@@ -68,8 +68,6 @@ Run the run.rb file located in the bin folder. (Execute Ruby bin/run.rb in your 
 
 # License
  
-**License:** 
-
 #Learn.co Educational Content License
 
 Copyright (c) 2015 Flatiron School, Inc
