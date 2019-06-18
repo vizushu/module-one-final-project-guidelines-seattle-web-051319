@@ -55,7 +55,7 @@ Run the run.rb file located in the bin folder.
 @vizushu
 
 # License
- 
+ git 
 **License:** 
 [The MIT License](https://github.com/miketierney/artii)
 [Learn.co License](http://learn.co/content-license)
